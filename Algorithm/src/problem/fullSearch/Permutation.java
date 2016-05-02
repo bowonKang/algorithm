@@ -1,4 +1,4 @@
-package FullSearch;
+package problem.fullSearch;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
