@@ -24,14 +24,14 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-public class LIS {
+public class LIS_Before {
 
 	static String[] line;
 	static int C;
 	static int N;
 	static int[] num;
-	static int[] cache;
-		
+	static int[] lisCount;
+	
 	public static void main(String[] args) throws Exception {
 		System.setIn(new FileInputStream("sample_input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -42,32 +42,31 @@ public class LIS {
 			N = Integer.parseInt(br.readLine().trim());
 			
 			num = new int[N];
-			cache = new int[N];
+			lisCount = new int[N];
 			
 			line = br.readLine().trim().split(" ");
 			for(int i=0; i<N; i++){
 				num[i] = Integer.parseInt(line[i]);
-				cache[i] = -1;
+				lisCount[i] = 1;
 			}
 			
-			System.out.println(lis01(0));
-		}
-	}
-
-	private static int lis01(int start) {
-		if(cache[start] != -1){
-			return cache[start];
-		}
-		
-		cache[start] = 1;
-		
-		for(int i=start+1; i < N; i++){
-			if(num[start] < num[i]){
-				cache[start] = Math.max(cache[start], lis01(i)+1);
+			for(int i=1; i<N; i++){
+				for(int j=0; j<i; j++){
+					if(num[i] > num[j]){
+						lisCount[i] = Math.max(lisCount[i], lisCount[j]+1);
+					}
+				}
 			}
+			
+			int answer = 0;
+			for(int i=0; i<N; i++){
+				if(answer < lisCount[i]){
+					answer = lisCount[i];
+				}					
+			}
+			
+			System.out.println(answer);
 		}
-		
-		return cache[start];
 		
 	}
 

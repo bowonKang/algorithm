@@ -1,7 +1,9 @@
 /**
 문제 : https://algospot.com/judge/problem/read/TRIANGLEPATH
 
-input
+교과서 문제풀이 2 -> 입력 걸러내어 효율적으로 적용 (최적부분구조 문제)
+
+/input/
 2
 5
 6
@@ -16,7 +18,7 @@ input
 32 64 32 64
 128 256 128 256 128
 
-output
+/output/
 28
 341
  */
@@ -31,7 +33,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class TrianglePath {
+public class TrianglePath03 {
 	
 	static String[] line;	
 	static int T;
@@ -43,7 +45,7 @@ public class TrianglePath {
 	static int[][] cache;
 		
 	public static void main(String[] args) throws Exception {
-	//	System.setIn(new FileInputStream("sample_input.txt"));
+		System.setIn(new FileInputStream("sample_input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		T = Integer.parseInt(br.readLine().trim());
@@ -58,45 +60,30 @@ public class TrianglePath {
 				line = br.readLine().trim().split(" ");
 				for(int j=0; j<line.length; j++){
 					triArr[i][j] = Integer.parseInt(line[j]);
-					if(i-1 < 0){
-						cache[i][j] = triArr[i][j];
-					}else if(j-1 < 0){
-						cache[i][j] = triArr[i][j] + cache[i-1][j];
-					}else{
-						cache[i][j] = Math.max(triArr[i][j] + cache[i-1][j], triArr[i][j] + cache[i-1][j-1]);
-					}					
-					//System.out.print(triArr[i][j] + " ");
 				}
-				//System.out.println();
-			}		
+			}	
+			
 			
 			for(int i=0; i<N; i++){
-				if(cache[N-1][i] > maxValue){
-					maxValue = cache[N-1][i];
+				for(int j=0; j<N; j++){
+						cache[i][j] = -1;
 				}
 			}
 			
-			System.out.println(maxValue);
-			
-			//System.out.println(getMax(0, 0, 0));
-			
+			System.out.println(path(0, 0));					
 		}
 	}
 
-	private static int getMax(int row, int col, int sum) {
-		sum += triArr[row][col];
-				
-		if(row == N-1){
-		//	System.out.println(row + " / " + col + " / " + sum );
-			return sum;
+	private static int path(int y, int x) {
+		System.out.println(y+ " / " + x+ " / " + cache[y][x]);
+		if(y == N-1){
+			return triArr[y][x];
 		}
 		
-		/*
-		if(sum > cache[row][col] && cache[row][col] != 0){
-			System.out.println("1");
-			return cache[row][col] = sum;
-		}*/
-					
-		return Math.max(getMax(row+1, col, sum), getMax(row+1, col+1, sum));
+		if (cache[y][x] != -1){
+			return cache[y][x];
+		}
+		
+		return cache[y][x] = Math.max(path(y+1,x), path(y+1,x+1)) + triArr[y][x];		
 	}
 }

@@ -1,7 +1,9 @@
 /**
 문제 : https://algospot.com/judge/problem/read/TRIANGLEPATH
 
-input
+교과서 문제풀이 1 -> 무식하게 DP 로 적용하기
+
+/input/
 2
 5
 6
@@ -16,10 +18,13 @@ input
 32 64 32 64
 128 256 128 256 128
 
-output
+/output/
 28
 341
  */
+
+package problem.dp;
+
 
 
 import java.io.BufferedReader;
@@ -28,7 +33,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class Main {
+public class TrianglePath02 {
 	
 	static String[] line;	
 	static int T;
@@ -37,10 +42,10 @@ public class Main {
 	static int maxValue;
 
 	static int[][] triArr;
-	static int[][] cache;
+	static int[][][] cache;
 		
 	public static void main(String[] args) throws Exception {
-	//	System.setIn(new FileInputStream("sample_input.txt"));
+		System.setIn(new FileInputStream("sample_input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		T = Integer.parseInt(br.readLine().trim());
@@ -48,52 +53,40 @@ public class Main {
 		for(int test_case = 1; test_case <= T; test_case++){
 			N = Integer.parseInt(br.readLine().trim());
 			triArr = new int[N][N];
-			cache = new int[N][N];
+			cache = new int[N][N][100000];
 			maxValue = 0;
 			
 			for(int i=0; i<N; i++){
 				line = br.readLine().trim().split(" ");
 				for(int j=0; j<line.length; j++){
 					triArr[i][j] = Integer.parseInt(line[j]);
-					if(i-1 < 0){
-						cache[i][j] = triArr[i][j];
-					}else if(j-1 < 0){
-						cache[i][j] = triArr[i][j] + cache[i-1][j];
-					}else{
-						cache[i][j] = Math.max(triArr[i][j] + cache[i-1][j], triArr[i][j] + cache[i-1][j-1]);
-					}					
-					//System.out.print(triArr[i][j] + " ");
 				}
-				//System.out.println();
-			}		
+			}	
+			
 			
 			for(int i=0; i<N; i++){
-				if(cache[N-1][i] > maxValue){
-					maxValue = cache[N-1][i];
+				for(int j=0; j<N; j++){
+					for(int k=0; k<100000; k++){
+						cache[i][j][k] = -1;
+					}
 				}
 			}
 			
-			System.out.println(maxValue);
-			
-			//System.out.println(getMax(0, 0, 0));
-			
+			System.out.println(path(0, 0, 0));					
 		}
 	}
 
-	private static int getMax(int row, int col, int sum) {
-		sum += triArr[row][col];
-				
-		if(row == N-1){
-		//	System.out.println(row + " / " + col + " / " + sum );
-			return sum;
+	private static int path(int y, int x, int sum) {
+		//System.out.println(y + " / " + x + " / " + sum);
+		if(y == N-1){
+			return sum + triArr[y][x];
 		}
 		
-		/*
-		if(sum > cache[row][col] && cache[row][col] != 0){
-			System.out.println("1");
-			return cache[row][col] = sum;
-		}*/
-					
-		return Math.max(getMax(row+1, col, sum), getMax(row+1, col+1, sum));
+		if (cache[y][x][sum] != -1){
+			return cache[y][x][sum];
+		}
+		
+		sum += triArr[y][x];
+		return cache[y][x][sum] = Math.max(path(y+1,x+1,sum), path(y+1,x,sum));		
 	}
 }

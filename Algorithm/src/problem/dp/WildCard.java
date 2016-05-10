@@ -1,8 +1,8 @@
 /**
 ¹®Á¦ : https://algospot.com/judge/problem/read/JUMPGAME
 
-Input
-2
+/Input/
+3
 he?p
 3
 help
@@ -10,11 +10,20 @@ heap
 helpp
 *p*
 3
-
-Output
 help
 papa
 hello
+*bb*
+1
+babbbc
+
+/Output/
+heap
+help
+help
+papa
+babbbc
+
  */
 
 package problem.dp;
@@ -33,8 +42,6 @@ public class WildCard {
 
 	static StringBuffer word;
 	static StringBuffer[] str;
-	//static char[] W;
-	//static char[][] str;
 	static int[][] cache;
 		
 	static class CharComp implements Comparator<StringBuffer>{
@@ -90,8 +97,6 @@ public class WildCard {
 	}
 
 	private static int matchDp(int w, int s, int i) {
-		//System.out.println(w + " / " + s + " / " + str[i].toString() + " / " + i);
-		
 		if(cache[w][s] != -1){
 			return cache[w][s];
 		}
